@@ -26,7 +26,6 @@ def test_first_three(client):
 def test_add_implementation(client):
     response = client.post('/member', json={
 		"first_name": "Tommy",
-        "id": 3443,
 		"age": 23,
 		"lucky_numbers": [34,65,23,4,6]
 	})
@@ -61,19 +60,19 @@ def test_get_members_returns_list_of_five(client):
 
 @pytest.mark.it("Method GET /member/<int:id> should exist")
 def test_get_single_member_implemented(client):
-    response = client.get('/member/3443')
+    response = client.get('/member/4')
     assert response.status_code == 200
 
 @pytest.mark.it("Method GET /member/<int:id> should return a one single family member in a dictionary format")
 def test_get_single_member_returns_dict(client):
-    response = client.get('/member/3443')
+    response = client.get('/member/4')
     data = json.loads(response.data)
     assert data is not None
     assert isinstance(data, dict)
 
 @pytest.mark.it("The dictionary returned by GET /member/<int:id> should contain one family member with the keys [name, id, age, lucky_numbers]")
 def test_get_single_member_has_keys(client):
-    response = client.get('/member/3443')
+    response = client.get('/member/4')
     data = json.loads(response.data)
 
     assert data is not None
@@ -84,11 +83,11 @@ def test_get_single_member_has_keys(client):
 
 @pytest.mark.it("Method GET /member/3443 should return Tommy")
 def test_get_first_member_tommy(client):
-    response = client.get('/member/3443')
+    response = client.get('/member/1')
     data = json.loads(response.data)
     assert data is not None
     assert "first_name" in data
-    assert data["first_name"] == "Tommy"
+    assert data["first_name"] == "Jhon"
 
 @pytest.mark.it("Implement method DELETE /member/<int:id> to delete a family member")
 def test_delete_member(client):

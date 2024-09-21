@@ -33,24 +33,27 @@ def get_all_members():
 def get_member(id):
     member = jackson_family.get_member(id)
     if member:
-        # Cambiar la estructura del miembro para que use 'name' en lugar de 'first_name' y 'last_name'
         member_dict = {
-            "id": member["id"],
             "name": member["first_name"],  # Puedes elegir cómo combinar el nombre
+            "id": member["id"],
             "age": member["age"],
             "lucky_numbers": member["lucky_numbers"]
         }
         return jsonify(member_dict), 200
-    return jsonify({"message": "Member not found"}), 404
+    else:
+        error_message = {"message": "Member not found"}
+        return jsonify(error_message), 404
+
 
 @app.route('/member', methods=['POST'])
 def add_member():
     member_data = request.get_json()
     if not member_data or 'first_name' not in member_data or 'age' not in member_data or 'lucky_numbers' not in member_data:
-        return jsonify({"message": "Invalid data"}), 400  # Cambia a 400
+        return jsonify({"message": "Invalid data"}), 400  
 
     jackson_family.add_member(member_data)
-    return jsonify({"message": "Member created successfully", "member": member_data}), 201
+    return jsonify({"message": "Member created successfully", "member": member_data}), 200
+
 
 @app.route('/member/<int:id>', methods=['DELETE'])
 def delete_member(id):
