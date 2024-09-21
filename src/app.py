@@ -29,29 +29,36 @@ def get_all_members():
     members = jackson_family.get_all_members()
     return jsonify(members), 200
 
-@app.route('/members/<int:member_id>', methods=['GET'])
-def get_member(member_id):
-    member = jackson_family.get_member(member_id)
+@app.route('/member/<int:id>', methods=['GET'])
+def get_member(id):
+    member = jackson_family.get_member(id)
     if member:
-        return jsonify(member), 200
+        # Cambiar la estructura del miembro para que use 'name' en lugar de 'first_name' y 'last_name'
+        member_dict = {
+            "id": member["id"],
+            "name": member["first_name"],  # Puedes elegir cómo combinar el nombre
+            "age": member["age"],
+            "lucky_numbers": member["lucky_numbers"]
+        }
+        return jsonify(member_dict), 200
     return jsonify({"message": "Member not found"}), 404
 
-@app.route('/members', methods=['POST'])
+@app.route('/member', methods=['POST'])
 def add_member():
     member_data = request.get_json()
     if not member_data or 'first_name' not in member_data or 'age' not in member_data or 'lucky_numbers' not in member_data:
-        return jsonify({"message": "Invalid data"}), 400  
+        return jsonify({"message": "Invalid data"}), 400  # Cambia a 400
 
     jackson_family.add_member(member_data)
     return jsonify({"message": "Member created successfully", "member": member_data}), 201
 
-@app.route('/members/<int:member_id>', methods=['DELETE'])
-def delete_member(member_id):
-    member = jackson_family.get_member(member_id)
+@app.route('/member/<int:id>', methods=['DELETE'])
+def delete_member(id):
+    member = jackson_family.get_member(id)
     if not member:
-        return jsonify({"message": "Member not found"}), 404 
+        return jsonify({"message": "Member not found"}), 404
 
-    jackson_family.delete_member(member_id)
+    jackson_family.delete_member(id)
     return jsonify({"done": True}), 200
 
 # this only runs if `$ python src/app.py` is executed
