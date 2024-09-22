@@ -32,17 +32,9 @@ def get_all_members():
 @app.route('/member/<int:id>', methods=['GET'])
 def get_member(id):
     member = jackson_family.get_member(id)
-    if member:
-        member_dict = {
-            "name": member["first_name"],  # Puedes elegir cómo combinar el nombre
-            "id": member["id"],
-            "age": member["age"],
-            "lucky_numbers": member["lucky_numbers"]
-        }
-        return jsonify(member_dict), 200
-    else:
-        error_message = {"message": "Member not found"}
-        return jsonify(error_message), 404
+
+    return jsonify(member), 200
+    
 
 
 @app.route('/member', methods=['POST'])
@@ -58,11 +50,11 @@ def add_member():
 @app.route('/member/<int:id>', methods=['DELETE'])
 def delete_member(id):
     member = jackson_family.get_member(id)
-    if not member:
-        return jsonify({"message": "Member not found"}), 404
+  #  if not member:
+        #return jsonify({"message": "Member not found"}), 404
 
     jackson_family.delete_member(id)
-    return jsonify({"done": True}), 200
+    return jsonify({"done": True,'deleted_member':member}), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':

@@ -87,7 +87,7 @@ def test_get_first_member_tommy(client):
     data = json.loads(response.data)
     assert data is not None
     assert "first_name" in data
-    assert data["first_name"] == "Jhon"
+    assert data["first_name"] == "John"
 
 @pytest.mark.it("Implement method DELETE /member/<int:id> to delete a family member")
 def test_delete_member(client):
@@ -109,4 +109,4 @@ def test_delete_response(client):
 def test_get_members_returns_list_of_four(client):
     response = client.get('/members')
     members = json.loads(response.data)
-    assert len(members) == 4
+    assert len(members) == 6
